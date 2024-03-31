@@ -1,7 +1,7 @@
 import { APIGatewayEvent } from 'aws-lambda';
 import productsMock from '../../__mocks__/products.json';
 
-export const getProductsById = async (event: APIGatewayEvent) => {
+export const getProductById = async (event: APIGatewayEvent) => {
   const { id } = event.pathParameters;
   const product = productsMock.find((p) => p.id === id);
 

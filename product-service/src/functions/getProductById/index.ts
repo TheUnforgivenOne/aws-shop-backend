@@ -1,7 +1,7 @@
 import { handlerPath } from '@libs/handler-resolver';
 
 export default {
-  handler: `${handlerPath(__dirname)}/handler.getProductsById`,
+  handler: `${handlerPath(__dirname)}/handler.getProductById`,
   events: [
     {
       httpApi: {
