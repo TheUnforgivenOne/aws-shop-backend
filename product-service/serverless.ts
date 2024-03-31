@@ -12,6 +12,9 @@ const serverlessConfiguration: AWS = {
     runtime: 'nodejs20.x',
     region: 'eu-west-1',
     profile: 'personal-account',
+    httpApi: {
+      cors: true,
+    },
   },
   // import the function via paths
   functions: { getProductsById, getProducts },
