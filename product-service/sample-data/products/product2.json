@@ -1,0 +1,17 @@
+{
+  "id": {
+    "S": "70c24e40-6ecc-4150-900a-0417188da106"
+  },
+  "title": {
+    "S": "Tired cat"
+  },
+  "description": {
+    "S": "Tired black cat"
+  },
+  "price": {
+    "N": "50"
+  },
+  "imgUrl": {
+    "S": "https://i.postimg.cc/yDpPKTFM/Tired.jpg"
+  }
+}

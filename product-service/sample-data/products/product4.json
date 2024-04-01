@@ -1,0 +1,17 @@
+{
+  "id": {
+    "S": "aa9994f5-2eed-4529-9f0c-109294b6dfdb"
+  },
+  "title": {
+    "S": "Drunk cat"
+  },
+  "description": {
+    "S": "Drunk black cat"
+  },
+  "price": {
+    "N": "25"
+  },
+  "imgUrl": {
+    "S": "https://i.postimg.cc/dhVBgfTR/Hight.jpg"
+  }
+}

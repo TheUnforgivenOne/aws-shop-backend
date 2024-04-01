@@ -1,0 +1,17 @@
+{
+  "id": {
+    "S": "0827f2c5-a405-43fa-a85c-124b2f61eeff"
+  },
+  "title": {
+    "S": "Common cat"
+  },
+  "description": {
+    "S": "Common black cat"
+  },
+  "price": {
+    "N": "100"
+  },
+  "imgUrl": {
+    "S": "https://i.postimg.cc/nss1hQ2C/Regular.jpg"
+  }
+}
