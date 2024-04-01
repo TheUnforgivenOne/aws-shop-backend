@@ -15,6 +15,10 @@ const serverlessConfiguration: AWS = {
     httpApi: {
       cors: true,
     },
+    environment: {
+      PRODUCTS_TABLE: '${self:custom.productsTable}',
+      STOCKS_TABLE: '${self:custom.stocksTable}',
+    },
   },
   // import the function via paths
   functions: { getProductById, getProducts },
@@ -30,6 +34,8 @@ const serverlessConfiguration: AWS = {
       platform: 'node',
       concurrency: 10,
     },
+    productsTable: 'products',
+    stocksTable: 'stocks',
   },
 };
 
