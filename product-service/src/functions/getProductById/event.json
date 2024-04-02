@@ -1,0 +1,16 @@
+{
+  "httpMethod": "GET",
+  "path": "",
+  "pathParameters": {
+    "id": "0827f2c5-a405-43fa-a85c-124b2f61eeff"
+  },
+  "headers": {},
+  "multiValueHeaders": {},
+  "isBase64Encoded": false,
+  "queryStringParameters": {},
+  "multiValueQueryStringParameters": {},
+  "stageVariables": {},
+  "requestContext": null,
+  "resource": "",
+  "body": ""
+}
