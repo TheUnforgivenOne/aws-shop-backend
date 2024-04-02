@@ -2,9 +2,6 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@database/*": [
-        "src/database/*"
-      ],
       "@functions/*": [
         "src/functions/*"
       ],
