@@ -5,6 +5,7 @@ import { v4 as uuid } from 'uuid';
 
 export const createProduct = async (event: APIGatewayEvent) => {
   try {
+    console.log(event);
     const params = JSON.parse(event.body);
     const id = uuid();
 

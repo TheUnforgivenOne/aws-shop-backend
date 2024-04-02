@@ -3,6 +3,7 @@ import dbClient from '../../dbClient';
 
 export const getProductById = async (event: APIGatewayEvent) => {
   try {
+    console.log(event);
     const { id } = event.pathParameters;
 
     const { Item: product } = await dbClient.getProductById(id);
