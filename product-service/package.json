@@ -5,7 +5,9 @@
   "main": "serverless.ts",
   "scripts": {
     "test": "jest",
-    "deploy": "sls deploy"
+    "deploy": "sls deploy",
+    "create-tables": "ts-node scripts/createTables.ts",
+    "fill-tables": "ts-node scripts/fillTables.ts"
   },
   "engines": {
     "node": ">=20.0.0"
