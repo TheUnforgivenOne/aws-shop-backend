@@ -8,7 +8,7 @@ export const getProductById = async (event: APIGatewayEvent) => {
   if (!product) {
     return {
       statusCode: 404,
-      body: `Cannot find product with id ${id}`,
+      body: JSON.stringify({ message: `Cannot find product with id ${id}` }),
     };
   }
 
