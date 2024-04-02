@@ -8,6 +8,13 @@ export const createProduct = async (event: APIGatewayEvent) => {
     const params = JSON.parse(event.body);
     const id = uuid();
 
+    if (!params?.title?.length || !params?.description?.length || !params?.price || !params?.count) {
+      return {
+        status: 400,
+        body: JSON.stringify({ message: 'Validation error' }),
+      };
+    }
+
     const product: Product = {
       id,
       title: params.title,
