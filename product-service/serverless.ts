@@ -19,6 +19,13 @@ const serverlessConfiguration: AWS = {
       PRODUCTS_TABLE: '${self:custom.productsTable}',
       STOCKS_TABLE: '${self:custom.stocksTable}',
     },
+    iamRoleStatements: [
+      {
+        Effect: 'Allow',
+        Action: ['dynamodb:PutItem', 'dynamodb:Get*', 'dynamodb:Scan*'],
+        Resource: 'arn:aws:dynamodb:eu-west-1:*:*',
+      },
+    ],
   },
   // import the function via paths
   functions: { getProductById, getProducts },

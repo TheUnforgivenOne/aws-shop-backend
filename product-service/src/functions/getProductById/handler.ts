@@ -1,13 +1,11 @@
 import { APIGatewayEvent } from 'aws-lambda';
-import * as queries from '@database/queries';
+import dbClient from '../../dbClient';
 
 export const getProductById = async (event: APIGatewayEvent) => {
-  const { id } = event.pathParameters;
-
   try {
-    const { Item: product } = await queries.getProductById(id);
-    const { Item: stock } = await queries.getStockById(id);
+    const { id } = event.pathParameters;
 
+    const { Item: product } = await dbClient.getProductById(id);
     if (!product) {
       return {
         statusCode: 404,
@@ -15,16 +13,24 @@ export const getProductById = async (event: APIGatewayEvent) => {
       };
     }
 
-    const res = { ...product, count: stock?.count };
+    const { Item: stock } = await dbClient.getStockById(id);
+    if (!stock) {
+      return {
+        statusCode: 404,
+        body: JSON.stringify({ message: `Cannot find stock for product with id ${id}` }),
+      };
+    }
+
+    const response = { ...product, count: stock.count };
 
     return {
       statusCode: 200,
-      body: JSON.stringify(res),
+      body: JSON.stringify(response),
     };
   } catch (e) {
     return {
       statusCode: 500,
-      body: 'Something went wrong',
+      body: JSON.stringify({ message: 'Something went wrong' }),
     };
   }
 };

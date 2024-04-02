@@ -1,23 +1,23 @@
-import * as queries from '@database/queries';
+import dbClient from '../../dbClient';
 
 export const getProducts = async () => {
   try {
-    const { Items: products } = await queries.getAllProducts();
-    const { Items: stocks } = await queries.getAllStocks();
+    const { Items: products } = await dbClient.getAllProducts();
+    const { Items: stocks } = await dbClient.getAllStocks();
 
-    const res = products.map((product) => ({
+    const response = products.map((product) => ({
       ...product,
-      count: stocks.find((stock) => stock.product_id === product.id)?.count,
+      count: stocks.find((stock) => stock.product_id === product.id).count,
     }));
 
     return {
       statusCode: 200,
-      body: JSON.stringify(res),
+      body: JSON.stringify(response),
     };
   } catch (e) {
     return {
       statusCode: 500,
-      body: 'Something went wrong',
+      body: JSON.stringify({ message: 'Something went wrong' }),
     };
   }
 };

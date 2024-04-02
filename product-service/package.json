@@ -6,6 +6,7 @@
   "scripts": {
     "test": "jest",
     "deploy": "sls deploy",
+    "delete": "sls remove",
     "create-tables": "ts-node scripts/createTables.ts",
     "fill-tables": "ts-node scripts/fillTables.ts"
   },
