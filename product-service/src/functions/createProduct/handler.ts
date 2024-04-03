@@ -1,7 +1,7 @@
 import { APIGatewayEvent } from 'aws-lambda';
+import { v4 as uuid } from 'uuid';
 import { Product, Stock } from '../../types';
 import dbClient from '../../dbClient';
-import { v4 as uuid } from 'uuid';
 
 export const createProduct = async (event: APIGatewayEvent) => {
   try {
