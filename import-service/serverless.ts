@@ -1,6 +1,6 @@
 import type { AWS } from '@serverless/typescript';
 
-import { importProductsFile } from 'src/functions';
+import { importProductsFile, importFileParser } from 'src/functions';
 
 const serverlessConfiguration: AWS = {
   service: 'import-service',
@@ -15,12 +15,7 @@ const serverlessConfiguration: AWS = {
     iamRoleStatements: [
       {
         Effect: 'Allow',
-        Action: 's3:ListBucket',
-        Resource: 'arn:aws:s3:::shop-import-service-bucket',
-      },
-      {
-        Effect: 'Allow',
-        Action: 's3:*',
+        Action: ['s3:GetObject', 's3:PutObject'],
         Resource: 'arn:aws:s3:::shop-import-service-bucket/*',
       },
     ],
@@ -28,7 +23,7 @@ const serverlessConfiguration: AWS = {
       cors: true,
     },
   },
-  functions: { importProductsFile },
+  functions: { importProductsFile, importFileParser },
   package: { individually: true },
   resources: {
     Resources: {
