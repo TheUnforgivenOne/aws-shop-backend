@@ -1,13 +1,18 @@
+import { AWS } from '@serverless/typescript';
 import { handlerPath } from '../../libs/handler-resolver';
 
-export default {
+type AWSLambdaType = AWS['functions']['k'];
+
+const importProductsFile: AWSLambdaType = {
   handler: `${handlerPath(__dirname)}/handler.importProductsFile`,
   events: [
     {
       httpApi: {
-        method: 'post',
+        method: 'get',
         path: '/import',
       },
     },
   ],
 };
+
+export default importProductsFile;

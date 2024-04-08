@@ -12,6 +12,21 @@ const serverlessConfiguration: AWS = {
     profile: 'personal-account',
     runtime: 'nodejs20.x',
     environment: {},
+    iamRoleStatements: [
+      {
+        Effect: 'Allow',
+        Action: 's3:ListBucket',
+        Resource: 'arn:aws:s3:::shop-import-service-bucket',
+      },
+      {
+        Effect: 'Allow',
+        Action: 's3:*',
+        Resource: 'arn:aws:s3:::shop-import-service-bucket/*',
+      },
+    ],
+    httpApi: {
+      cors: true,
+    },
   },
   functions: { importProductsFile },
   package: { individually: true },
@@ -23,6 +38,15 @@ const serverlessConfiguration: AWS = {
           BucketName: '${self:custom.bucketName}',
           VersioningConfiguration: {
             Status: 'Suspended',
+          },
+          CorsConfiguration: {
+            CorsRules: [
+              {
+                AllowedHeaders: ['*'],
+                AllowedMethods: ['GET', 'PUT'],
+                AllowedOrigins: ['*'],
+              },
+            ],
           },
         },
       },
