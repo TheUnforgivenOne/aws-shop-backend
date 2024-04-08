@@ -1,0 +1,14 @@
+{
+  "httpMethod": "POST",
+  "path": "",
+  "pathParameters": {},
+  "headers": {},
+  "multiValueHeaders": {},
+  "isBase64Encoded": false,
+  "queryStringParameters": {},
+  "multiValueQueryStringParameters": {},
+  "stageVariables": {},
+  "requestContext": null,
+  "resource": "",
+  "body": "{ \"title\": \"New cat\", \"description\": \"New cat description\", \"price\": 250, \"count\": 1 }"
+}

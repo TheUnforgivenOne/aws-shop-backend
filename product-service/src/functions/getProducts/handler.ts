@@ -1,8 +1,25 @@
-import productsMock from '../../__mocks__/products.json';
+import { APIGatewayEvent } from 'aws-lambda';
+import dbClient from '../../dbClient';
 
-export const getProducts = async () => {
-  return {
-    statusCode: 200,
-    body: JSON.stringify(productsMock),
-  };
+export const getProducts = async (event: APIGatewayEvent) => {
+  try {
+    console.log(event);
+    const { Items: products } = await dbClient.getAllProducts();
+    const { Items: stocks } = await dbClient.getAllStocks();
+
+    const response = products.map((product) => ({
+      ...product,
+      count: stocks.find((stock) => stock.product_id === product.id).count,
+    }));
+
+    return {
+      statusCode: 200,
+      body: JSON.stringify(response),
+    };
+  } catch (e) {
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ message: 'Something went wrong' }),
+    };
+  }
 };
