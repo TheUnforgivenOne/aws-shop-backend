@@ -1,6 +1,7 @@
 import { handlerPath } from '../../libs/handler-resolver';
+import { AWSLambdaType } from '../../types';
 
-export default {
+const getProductById: AWSLambdaType = {
   handler: `${handlerPath(__dirname)}/handler.getProductById`,
   events: [
     {
@@ -11,3 +12,5 @@ export default {
     },
   ],
 };
+
+export default getProductById;

@@ -1,4 +1,7 @@
 import { ScanCommandOutput, GetCommandOutput } from '@aws-sdk/lib-dynamodb';
+import { AWS } from '@serverless/typescript';
+
+export type AWSLambdaType = AWS['functions']['k'];
 
 export type Product = {
   id: string;
