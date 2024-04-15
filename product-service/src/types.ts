@@ -16,6 +16,8 @@ export type Stock = {
   count: number;
 };
 
+export type ProductDTO = Partial<Omit<Product, 'id'> & Omit<Stock, 'product_id'>>;
+
 export type IScanCommandOutput<T> = Omit<ScanCommandOutput, 'Items'> & {
   Items?: T[];
 };

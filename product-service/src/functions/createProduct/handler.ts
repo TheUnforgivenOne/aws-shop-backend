@@ -2,6 +2,7 @@ import { APIGatewayEvent } from 'aws-lambda';
 import { v4 as uuid } from 'uuid';
 import { Product, Stock } from '../../types';
 import dbClient from '../../dbClient';
+import isValidProduct from '../../utils/isValidProduct';
 
 export const createProduct = async (event: APIGatewayEvent) => {
   try {
@@ -9,7 +10,7 @@ export const createProduct = async (event: APIGatewayEvent) => {
     const params = JSON.parse(event.body);
     const id = uuid();
 
-    if (!params?.title?.length || !params?.description?.length || !params?.price || !params?.count) {
+    if (!isValidProduct(params)) {
       return {
         status: 400,
         body: JSON.stringify({ message: 'Validation error' }),

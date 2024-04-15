@@ -1,6 +1,6 @@
 import type { AWS } from '@serverless/typescript';
 
-import { createProduct, getProducts, getProductById } from 'src/functions';
+import { catalogBatchProcess, createProduct, getProducts, getProductById } from 'src/functions';
 
 const serverlessConfiguration: AWS = {
   service: 'product-service',
@@ -26,8 +26,17 @@ const serverlessConfiguration: AWS = {
       },
     ],
   },
-  // import the function via paths
-  functions: { createProduct, getProductById, getProducts },
+  resources: {
+    Resources: {
+      CatalogItemsQueue: {
+        Type: 'AWS::SQS::Queue',
+        Properties: {
+          QueueName: '${self:custom.resources.catalogItemsQueue}'
+        },
+      },
+    },
+  },
+  functions: { catalogBatchProcess, createProduct, getProductById, getProducts },
   package: { individually: true },
   custom: {
     esbuild: {
@@ -39,6 +48,9 @@ const serverlessConfiguration: AWS = {
       define: { 'require.resolve': undefined },
       platform: 'node',
       concurrency: 10,
+    },
+    resources: {
+      catalogItemsQueue: 'catalogItemsQueue',
     },
     productsTable: 'products',
     stocksTable: 'stocks',
