@@ -9,7 +9,7 @@ export const catalogBatchProcess: SQSHandler = async (event) => {
     event.Records.map(async (item) => {
       try {
         const params = JSON.parse(item.body);
-
+        console.log(params, isValidProduct(params));
         if (!isValidProduct(params)) return 'Product validation error';
 
         const { count, ...productData } = params;

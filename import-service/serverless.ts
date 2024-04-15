@@ -11,12 +11,19 @@ const serverlessConfiguration: AWS = {
     region: 'eu-west-1',
     profile: 'personal-account',
     runtime: 'nodejs20.x',
-    environment: {},
+    environment: {
+      sqsUrl: '${self:custom.sqsUrl}',
+    },
     iamRoleStatements: [
       {
         Effect: 'Allow',
-        Action: ['s3:GetObject', 's3:PutObject'],
+        Action: ['s3:GetObject', 's3:PutObject', 's3:DeleteObject'],
         Resource: 'arn:aws:s3:::shop-import-service-bucket/*',
+      },
+      {
+        Effect: 'Allow',
+        Action: ['sqs:SendMessage'],
+        Resource: 'arn:aws:sqs:eu-west-1:*:*',
       },
     ],
     httpApi: {
@@ -59,6 +66,7 @@ const serverlessConfiguration: AWS = {
       concurrency: 10,
     },
     bucketName: 'shop-import-service-bucket',
+    sqsUrl: 'https://sqs.eu-west-1.amazonaws.com/851725182685/catalogItemsQueue',
   },
 };
 

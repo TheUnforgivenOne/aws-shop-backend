@@ -24,6 +24,11 @@ const serverlessConfiguration: AWS = {
         Action: ['dynamodb:PutItem', 'dynamodb:Get*', 'dynamodb:Scan*'],
         Resource: 'arn:aws:dynamodb:eu-west-1:*:*',
       },
+      {
+        Effect: 'Allow',
+        Action: ['sqs:*'],
+        Resource: 'arn:aws:sqs:eu-west-1:*:*',
+      },
     ],
   },
   resources: {
@@ -31,7 +36,7 @@ const serverlessConfiguration: AWS = {
       CatalogItemsQueue: {
         Type: 'AWS::SQS::Queue',
         Properties: {
-          QueueName: '${self:custom.resources.catalogItemsQueue}'
+          QueueName: '${self:custom.resources.catalogItemsQueue}',
         },
       },
     },
