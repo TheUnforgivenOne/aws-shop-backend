@@ -1,9 +1,9 @@
 import { SQSHandler } from 'aws-lambda';
 import { SNSClient, PublishCommand } from '@aws-sdk/client-sns';
 import { v4 as uuid } from 'uuid';
-import dbClient from 'src/dbClient';
-import { Product, Stock } from 'src/types';
-import isValidProduct from 'src/utils/isValidProduct';
+import dbClient from '../../dbClient';
+import { Product, Stock } from '../../types';
+import isValidProduct from '../../utils/isValidProduct';
 
 const snsClient = new SNSClient({ region: 'eu-west-1' });
 
