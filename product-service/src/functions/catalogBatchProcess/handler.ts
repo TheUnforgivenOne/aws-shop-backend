@@ -1,32 +1,42 @@
 import { SQSHandler } from 'aws-lambda';
+import { SNSClient, PublishCommand } from '@aws-sdk/client-sns';
 import { v4 as uuid } from 'uuid';
 import dbClient from 'src/dbClient';
 import { Product, Stock } from 'src/types';
 import isValidProduct from 'src/utils/isValidProduct';
 
+const snsClient = new SNSClient({ region: 'eu-west-1' });
+
 export const catalogBatchProcess: SQSHandler = async (event) => {
-  const result = await Promise.all(
-    event.Records.map(async (item) => {
-      try {
-        const params = JSON.parse(item.body);
-        console.log(params, isValidProduct(params));
-        if (!isValidProduct(params)) return 'Product validation error';
+  const results = [];
 
-        const { count, ...productData } = params;
+  for (let record of event.Records) {
+    try {
+      const params = JSON.parse(record.body);
 
-        const id = uuid();
-        const product: Product = { id, ...productData, imgUrl: '' };
-        const stock: Stock = { product_id: id, count };
+      if (!isValidProduct(params)) results.push('Product validation error');
 
-        await dbClient.createProduct(product, stock);
+      const { count, ...productData } = params;
 
-        return `Product ${id} imported`;
-      } catch (e) {
-        console.log(e);
-        return 'Error while import product, check console';
-      }
-    })
-  );
+      const id = uuid();
+      const product: Product = { id, ...productData, imgUrl: '' };
+      const stock: Stock = { product_id: id, count };
 
-  console.log('Done', result);
+      await dbClient.createProduct(product, stock);
+
+      results.push(`Product ${product.title} imported`);
+    } catch (e) {
+      console.log(e);
+      results.push('Error while import product, check console');
+    }
+  }
+
+  const message = 'Following products was imported\n' + results.join('\n');
+
+  const pubCommand = new PublishCommand({
+    TopicArn: process.env.SNS_TOPIC_ARN,
+    Subject: 'Products import',
+    Message: message,
+  });
+  await snsClient.send(pubCommand);
 };

@@ -17,6 +17,9 @@ const serverlessConfiguration: AWS = {
     environment: {
       PRODUCTS_TABLE: '${self:custom.productsTable}',
       STOCKS_TABLE: '${self:custom.stocksTable}',
+      SNS_TOPIC_ARN: {
+        Ref: 'CreateProductTopic',
+      },
     },
     iamRoleStatements: [
       {
@@ -29,6 +32,13 @@ const serverlessConfiguration: AWS = {
         Action: ['sqs:*'],
         Resource: 'arn:aws:sqs:eu-west-1:*:*',
       },
+      {
+        Effect: 'Allow',
+        Action: ['sns:Publish'],
+        Resource: {
+          Ref: 'CreateProductTopic',
+        },
+      },
     ],
   },
   resources: {
@@ -37,6 +47,22 @@ const serverlessConfiguration: AWS = {
         Type: 'AWS::SQS::Queue',
         Properties: {
           QueueName: '${self:custom.resources.catalogItemsQueue}',
+        },
+      },
+      CreateProductTopic: {
+        Type: 'AWS::SNS::Topic',
+        Properties: {
+          DisplayName: '${self:custom.resources.createProductTopic}',
+        },
+      },
+      CreateProductSubscription: {
+        Type: 'AWS::SNS::Subscription',
+        Properties: {
+          Protocol: 'email',
+          Endpoint: 'vladislav_potapov@epam.com',
+          TopicArn: {
+            Ref: 'CreateProductTopic',
+          },
         },
       },
     },
@@ -56,6 +82,8 @@ const serverlessConfiguration: AWS = {
     },
     resources: {
       catalogItemsQueue: 'catalogItemsQueue',
+      createProductTopic: 'createProductTopic',
+      createProductSubscription: 'createProductSubscription',
     },
     productsTable: 'products',
     stocksTable: 'stocks',
