@@ -9,7 +9,7 @@ const catalogBatchProcess: AWSLambdaType = {
         arn: {
           'Fn::GetAtt': ['CatalogItemsQueue', 'Arn'],
         },
-        batchSize: 2,
+        batchSize: 5,
       },
     },
   ],

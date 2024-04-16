@@ -65,6 +65,19 @@ const serverlessConfiguration: AWS = {
           },
         },
       },
+      ErrorCreateProductSubscription: {
+        Type: 'AWS::SNS::Subscription',
+        Properties: {
+          Protocol: 'email',
+          Endpoint: 'vladpotapow@yandex.ru',
+          TopicArn: {
+            Ref: 'CreateProductTopic',
+          },
+          FilterPolicy: {
+            importStatus: ['WARNING'],
+          },
+        },
+      },
     },
   },
   functions: { catalogBatchProcess, createProduct, getProductById, getProducts },

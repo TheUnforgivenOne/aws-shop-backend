@@ -1,5 +1,5 @@
 import { SQSHandler } from 'aws-lambda';
-import { SNSClient, PublishCommand } from '@aws-sdk/client-sns';
+import { SNSClient, PublishCommand, MessageAttributeValue } from '@aws-sdk/client-sns';
 import { v4 as uuid } from 'uuid';
 import dbClient from '../../dbClient';
 import { Product, Stock } from '../../types';
@@ -32,11 +32,18 @@ export const catalogBatchProcess: SQSHandler = async (event) => {
   }
 
   const message = 'Following products was imported\n' + results.join('\n');
+  const importStatus = results.every((res: string) => !res.toLowerCase().includes('error')) ? 'OK' : 'WARNING';
 
   const pubCommand = new PublishCommand({
     TopicArn: process.env.SNS_TOPIC_ARN,
     Subject: 'Products import',
     Message: message,
+    MessageAttributes: {
+      importStatus: {
+        DataType: 'String',
+        StringValue: importStatus,
+      },
+    },
   });
   await snsClient.send(pubCommand);
 };
