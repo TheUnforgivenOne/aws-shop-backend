@@ -26,9 +26,6 @@ const serverlessConfiguration: AWS = {
         Resource: 'arn:aws:sqs:eu-west-1:*:*',
       },
     ],
-    httpApi: {
-      cors: true,
-    },
   },
   functions: { importProductsFile, importFileParser },
   package: { individually: true },

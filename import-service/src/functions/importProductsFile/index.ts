@@ -10,6 +10,7 @@ const importProductsFile: AWSLambdaType = {
       http: {
         method: 'get',
         path: '/import',
+        cors: true,
         authorizer: {
           arn: 'arn:aws:lambda:eu-west-1:851725182685:function:authorization-service-dev-basicAuthorizer',
           type: 'token',
