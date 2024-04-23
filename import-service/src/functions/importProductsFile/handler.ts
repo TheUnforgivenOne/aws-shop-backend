@@ -27,7 +27,6 @@ export const importProductsFile = async (event: APIGatewayEvent) => {
     console.log(e);
     return {
       statusCode: 500,
-      headers: { 'Access-Control-Allow-Origin': '*' },
       body: JSON.stringify('Something went wrong, check logs'),
     };
   }

@@ -31,6 +31,28 @@ const serverlessConfiguration: AWS = {
   package: { individually: true },
   resources: {
     Resources: {
+      GatewayResponse401: {
+        Type: 'AWS::ApiGateway::GatewayResponse',
+        Properties: {
+          ResponseParameters: {
+            'gatewayresponse.header.Access-Control-Allow-Origin': "'*'",
+            'gatewayresponse.header.Access-Control-Allow-Headers': "'*'",
+          },
+          ResponseType: 'UNAUTHORIZED',
+          RestApiId: { Ref: 'ApiGatewayRestApi' },
+        },
+      },
+      GatewayResponse403: {
+        Type: 'AWS::ApiGateway::GatewayResponse',
+        Properties: {
+          ResponseParameters: {
+            'gatewayresponse.header.Access-Control-Allow-Origin': "'*'",
+            'gatewayresponse.header.Access-Control-Allow-Headers': "'*'",
+          },
+          ResponseType: 'ACCESS_DENIED',
+          RestApiId: { Ref: 'ApiGatewayRestApi' },
+        },
+      },
       importServiceBucket: {
         Type: 'AWS::S3::Bucket',
         Properties: {
