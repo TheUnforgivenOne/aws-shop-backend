@@ -14,6 +14,8 @@ Get product by id: `sls invoke local --function getProductById --data '{ "pathPa
 
 Create product: `sls invoke local --function createProduct --data '{ "body": "{ \"title\": \"New cat\", \"description\": \"New cat description\", \"price\": 250, \"count\": 1 }" }'`
 
+Put imported files into db `sls invoke local --function catalogBatchProcess --path 'src/functions/catalogBatchProcess/event.json'`
+
 # Setting up DynamoDB
 
 1. Specify AWS CLI profile `export AWS_PROFILE=<your-profile-name>`
