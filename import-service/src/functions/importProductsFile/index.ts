@@ -7,9 +7,23 @@ const importProductsFile: AWSLambdaType = {
   handler: `${handlerPath(__dirname)}/handler.importProductsFile`,
   events: [
     {
-      httpApi: {
+      http: {
         method: 'get',
         path: '/import',
+        cors: true,
+        authorizer: {
+          arn: 'arn:aws:lambda:eu-west-1:851725182685:function:authorization-service-dev-basicAuthorizer',
+          type: 'token',
+          identitySource: 'method.request.header.Authorization',
+          resultTtlInSeconds: 0,
+        },
+        request: {
+          parameters: {
+            querystrings: {
+              name: true,
+            },
+          },
+        },
       },
     },
   ],

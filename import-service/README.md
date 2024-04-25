@@ -1,6 +1,6 @@
 # Endpoints
 
-Get signed url - https://ejyo0nig7c.execute-api.eu-west-1.amazonaws.com/import (query: { name: string })
+Get signed url - https://jq71gt7425.execute-api.eu-west-1.amazonaws.com/dev/import (query: { name: string })
 
 You may try to upload .csv file from FE https://d2qdvzqkemc1x0.cloudfront.net/admin/products
 

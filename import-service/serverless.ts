@@ -26,14 +26,33 @@ const serverlessConfiguration: AWS = {
         Resource: 'arn:aws:sqs:eu-west-1:*:*',
       },
     ],
-    httpApi: {
-      cors: true,
-    },
   },
   functions: { importProductsFile, importFileParser },
   package: { individually: true },
   resources: {
     Resources: {
+      GatewayResponse401: {
+        Type: 'AWS::ApiGateway::GatewayResponse',
+        Properties: {
+          ResponseParameters: {
+            'gatewayresponse.header.Access-Control-Allow-Origin': "'*'",
+            'gatewayresponse.header.Access-Control-Allow-Headers': "'*'",
+          },
+          ResponseType: 'UNAUTHORIZED',
+          RestApiId: { Ref: 'ApiGatewayRestApi' },
+        },
+      },
+      GatewayResponse403: {
+        Type: 'AWS::ApiGateway::GatewayResponse',
+        Properties: {
+          ResponseParameters: {
+            'gatewayresponse.header.Access-Control-Allow-Origin': "'*'",
+            'gatewayresponse.header.Access-Control-Allow-Headers': "'*'",
+          },
+          ResponseType: 'ACCESS_DENIED',
+          RestApiId: { Ref: 'ApiGatewayRestApi' },
+        },
+      },
       importServiceBucket: {
         Type: 'AWS::S3::Bucket',
         Properties: {

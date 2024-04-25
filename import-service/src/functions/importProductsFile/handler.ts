@@ -20,6 +20,7 @@ export const importProductsFile = async (event: APIGatewayEvent) => {
 
     return {
       statusCode: 200,
+      headers: { 'Access-Control-Allow-Origin': '*' },
       body: JSON.stringify({ signedUrl }),
     };
   } catch (e) {
