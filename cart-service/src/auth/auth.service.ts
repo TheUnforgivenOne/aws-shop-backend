@@ -19,15 +19,14 @@ export class AuthService {
   }
 
   login(user: User, type) {
-    console.log(this);
     const LOGIN_MAP = {
       jwt: this.loginJWT,
       basic: this.loginBasic,
       default: this.loginJWT,
     };
-    const login = LOGIN_MAP[type];
+    const login = (LOGIN_MAP[type] ?? LOGIN_MAP.default).bind(this);
 
-    return login ? login.call(this, user) : LOGIN_MAP.default.call(this, user);
+    return login(user);
   }
 
   loginJWT(user: User) {
