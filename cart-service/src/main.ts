@@ -6,7 +6,7 @@ import helmet from 'helmet';
 import { AppModule } from './app.module';
 import { APIGatewayProxyHandler, Handler } from 'aws-lambda';
 
-const port = process.env.PORT || 4001;
+const port = process.env.PORT || 4000;
 // let server: Handler;
 
 async function bootstrap() {
