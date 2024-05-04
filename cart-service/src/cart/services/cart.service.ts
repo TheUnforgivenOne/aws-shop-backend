@@ -1,29 +1,32 @@
-import { Injectable } from '@nestjs/common';
-
-import { v4 } from 'uuid';
+import { Inject, Injectable, forwardRef } from '@nestjs/common';
 
 import { Cart as CartType } from '../models';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Cart } from '../entities/cart.entity';
+import { Cart } from '../entities';
+import { CartItemService } from './cartItem.service';
 
 @Injectable()
 export class CartService {
   constructor(
     @InjectRepository(Cart)
-    private cartsRepository: Repository<Cart>
+    private cartsRepository: Repository<Cart>,
+    @Inject(forwardRef(() => CartItemService))
+    private cartItemService: CartItemService
   ) {}
 
   async findByUserId(userId: string): Promise<Cart> {
-    return await this.cartsRepository.findOneBy({ userId });
+    return await this.cartsRepository.findOne({ where: { userId }, relations: { Items: true } });
+  }
+
+  async findById(cartId: string): Promise<Cart> {
+    return await this.cartsRepository.findOne({ where: { id: cartId }, relations: { Items: true } });
   }
 
   async createByUserId(userId: string): Promise<Cart> {
-    const newCart = new Cart();
-    newCart.userId = userId;
-    await newCart.save();
+    const { id } = await this.cartsRepository.create({ userId }).save();
 
-    return newCart;
+    return this.findById(id);
   }
 
   async findOrCreateByUserId(userId: string): Promise<Cart> {
@@ -36,15 +39,22 @@ export class CartService {
     return await this.createByUserId(userId);
   }
 
-  updateByUserId(userId: string, { items }: CartType) {
-    // const { id, ...rest } = this.findOrCreateByUserId(userId);
-    // const updatedCart = {
-    //   id,
-    //   ...rest,
-    //   items: [...items],
-    // };
-    // this.userCarts[userId] = { ...updatedCart };
-    // return { ...updatedCart };
+  async updateByUserId(
+    userId: string,
+    { productId, action }: { productId: string; action: 'inc' | 'dec' }
+  ): Promise<Cart> {
+    let cart = await this.findOrCreateByUserId(userId);
+
+    if (action === 'inc') {
+      await this.cartItemService.increaseCountOrAdd(cart, productId);
+    }
+    if (action === 'dec') {
+      await this.cartItemService.decreaseCountOrDelete(cart, productId);
+    }
+
+    cart = await this.findById(cart.id);
+
+    return cart;
   }
 
   async removeByUserId(userId: string): Promise<void> {
