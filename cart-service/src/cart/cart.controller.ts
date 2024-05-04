@@ -4,12 +4,18 @@ import { Controller, Get, Delete, Put, Body, Req, Post, UseGuards, HttpStatus } 
 import { OrderService } from '../order';
 import { AppRequest, getUserIdFromRequest } from '../shared';
 
-// import { calculateCartTotal } from './models-rules';
-import { CartService } from './services';
+import { CartService, CartItemService } from './services';
+import { DataSource } from 'typeorm';
+import { Cart, CartStatus } from './entities';
 
 @Controller('api/profile/cart')
 export class CartController {
-  constructor(private cartService: CartService, private orderService: OrderService) {}
+  constructor(
+    private dataSource: DataSource,
+    private cartService: CartService,
+    private cartItemService: CartItemService,
+    private orderService: OrderService
+  ) {}
 
   // @UseGuards(JwtAuthGuard)
   // @UseGuards(BasicAuthGuard)
@@ -30,7 +36,19 @@ export class CartController {
   @Put()
   async updateUserCart(@Req() req: AppRequest, @Body() body) {
     // TODO: validate body payload...
-    const cart = await this.cartService.updateByUserId(getUserIdFromRequest(req), body);
+    const userId = getUserIdFromRequest(req);
+    const { action, productId } = body;
+
+    let cart = await this.cartService.findOrCreateByUserId(userId);
+
+    if (action === 'inc') {
+      await this.cartItemService.increaseCountOrAdd(cart, productId);
+    }
+    if (action === 'dec') {
+      await this.cartItemService.decreaseCountOrDelete(cart, productId);
+    }
+
+    cart = await this.cartService.findById(cart.id);
 
     return {
       statusCode: HttpStatus.OK,
@@ -57,31 +75,28 @@ export class CartController {
   // @UseGuards(JwtAuthGuard)
   // @UseGuards(BasicAuthGuard)
   @Post('checkout')
-  checkout(@Req() req: AppRequest, @Body() body) {
-    // const userId = getUserIdFromRequest(req);
-    // const cart = this.cartService.findByUserId(userId);
-    // if (!(cart && cart.items.length)) {
-    //   const statusCode = HttpStatus.BAD_REQUEST;
-    //   req.statusCode = statusCode;
-    //   return {
-    //     statusCode,
-    //     message: 'Cart is empty',
-    //   };
-    // }
-    // const { id: cartId, items } = cart;
-    // const total = calculateCartTotal(cart);
-    // const order = this.orderService.create({
-    //   ...body, // TODO: validate and pick only necessary data
-    //   userId,
-    //   cartId,
-    //   items,
-    //   total,
-    // });
-    // this.cartService.removeByUserId(userId);
-    // return {
-    //   statusCode: HttpStatus.OK,
-    //   message: 'OK',
-    //   data: { order },
-    // };
+  async checkout(@Req() req: AppRequest, @Body() body) {
+    const userId = getUserIdFromRequest(req);
+    const cart = await this.cartService.findByUserId(userId);
+
+    if (!cart?.Items?.length) {
+      const statusCode = HttpStatus.BAD_REQUEST;
+      req.statusCode = statusCode;
+      return {
+        statusCode,
+        message: 'Cart is empty',
+      };
+    }
+
+    const order = await this.dataSource.transaction(async (transactionEntityManager) => {
+      await this.cartService.completeByUserId(transactionEntityManager, userId);
+      return await this.orderService.create(transactionEntityManager, cart);
+    });
+
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'OK',
+      data: { order },
+    };
   }
 }

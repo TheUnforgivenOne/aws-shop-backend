@@ -1,17 +1,14 @@
-import { Inject, Injectable, forwardRef } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Cart } from '../entities';
-import { CartItemService } from './cartItem.service';
+import { EntityManager, Repository } from 'typeorm';
+import { Cart, CartStatus } from '../entities';
 
 @Injectable()
 export class CartService {
   constructor(
     @InjectRepository(Cart)
-    private cartsRepository: Repository<Cart>,
-    @Inject(forwardRef(() => CartItemService))
-    private cartItemService: CartItemService
+    private cartsRepository: Repository<Cart>
   ) {}
 
   async findByUserId(userId: string): Promise<Cart> {
@@ -38,22 +35,9 @@ export class CartService {
     return await this.createByUserId(userId);
   }
 
-  async updateByUserId(
-    userId: string,
-    { productId, action }: { productId: string; action: 'inc' | 'dec' }
-  ): Promise<Cart> {
-    let cart = await this.findOrCreateByUserId(userId);
-
-    if (action === 'inc') {
-      await this.cartItemService.increaseCountOrAdd(cart, productId);
-    }
-    if (action === 'dec') {
-      await this.cartItemService.decreaseCountOrDelete(cart, productId);
-    }
-
-    cart = await this.findById(cart.id);
-
-    return cart;
+  // Transactional method
+  async completeByUserId(entityManager: EntityManager, userId: string): Promise<void> {
+    await entityManager.update(Cart, { userId }, { status: CartStatus.ORDERED });
   }
 
   async removeByUserId(userId: string): Promise<void> {

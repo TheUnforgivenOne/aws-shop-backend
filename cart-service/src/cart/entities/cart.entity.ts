@@ -1,7 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn, BaseEntity, OneToMany } from 'typeorm';
 import { CartItem } from './cartItem.entity';
 
-enum CartStatus {
+export enum CartStatus {
   OPEN = 'OPEN',
   ORDERED = 'ORDERED',
 }
