@@ -8,8 +8,8 @@ DROP TABLE IF EXISTS "carts";
 CREATE TABLE IF NOT EXISTS "carts" (
 	id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
 	user_id UUID NOT NULL,
-	created_at DATE NOT NULL DEFAULT now(),
-	updated_at DATE NOT NULL DEFAULT now(),
+	created_at TIMESTAMP NOT NULL DEFAULT now(),
+	updated_at TIMESTAMP NOT NULL DEFAULT now(),
 	status cart_status DEFAULT 'OPEN'
 );
 
