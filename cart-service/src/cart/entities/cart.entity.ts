@@ -1,6 +1,10 @@
 import { Entity, Column, PrimaryGeneratedColumn, BaseEntity, OneToMany } from 'typeorm';
-import { CartStatus } from '../models';
 import { CartItem } from './cartItem.entity';
+
+enum CartStatus {
+  OPEN = 'OPEN',
+  ORDERED = 'ORDERED',
+}
 
 @Entity({ name: 'carts' })
 export class Cart extends BaseEntity {

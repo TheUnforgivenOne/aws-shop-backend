@@ -4,7 +4,7 @@ import { Controller, Get, Delete, Put, Body, Req, Post, UseGuards, HttpStatus } 
 import { OrderService } from '../order';
 import { AppRequest, getUserIdFromRequest } from '../shared';
 
-import { calculateCartTotal } from './models-rules';
+// import { calculateCartTotal } from './models-rules';
 import { CartService } from './services';
 
 @Controller('api/profile/cart')
