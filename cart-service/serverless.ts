@@ -3,7 +3,7 @@ import { AWS } from '@serverless/typescript';
 const serverlessConfiguration: AWS = {
   service: 'cart-service',
   frameworkVersion: '3',
-  plugins: ['serverless-offline'],
+  plugins: ['serverless-offline', 'serverless-dotenv-plugin'],
 
   provider: {
     name: 'aws',
@@ -14,7 +14,7 @@ const serverlessConfiguration: AWS = {
 
   functions: {
     main: {
-      handler: 'dist/src/main.handler',
+      handler: 'dist/main.handler',
       events: [
         {
           http: {

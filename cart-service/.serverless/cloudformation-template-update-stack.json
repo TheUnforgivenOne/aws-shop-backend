@@ -162,13 +162,23 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/cart-service/dev/1714429012043-2024-04-29T22:16:52.043Z/cart-service.zip"
+          "S3Key": "serverless/cart-service/dev/1715021207628-2024-05-06T18:46:47.628Z/cart-service.zip"
         },
-        "Handler": "dist/src/main.handler",
+        "Handler": "dist/main.handler",
         "Runtime": "nodejs20.x",
         "FunctionName": "cart-service-dev-main",
         "MemorySize": 1024,
         "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "PORT": "4002",
+            "DB_HOST": "test-instance.c9e0ua8qe8x6.eu-west-1.rds.amazonaws.com",
+            "DB_PORT": "5432",
+            "DB_USER": "postgres",
+            "DB_PASSWORD": "NYhy4aTL1Fj",
+            "DB_NAME": "cart-service-db"
+          }
+        },
         "Role": {
           "Fn::GetAtt": [
             "IamRoleLambdaExecution",
@@ -180,14 +190,14 @@
         "MainLogGroup"
       ]
     },
-    "MainLambdaVersion9rXU8ww1c9SBNGrgQMwCbwbjkGx45CXeD7DwOeZ2nzI": {
+    "MainLambdaVersionfZ85nh51OKt43HrwO3tboqJSnrfy1PMmByfKloIYrc": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "MainLambdaFunction"
         },
-        "CodeSha256": "hPaRw9Yc56oeF7QByDIIHLLfZMo3L9JJTa73W7oA+7w="
+        "CodeSha256": "yBtZTWVCW0mPN/oV8rTukqjGU7y5D+Pzl2F01Q7hR6E="
       }
     },
     "ApiGatewayRestApi": {
@@ -312,7 +322,7 @@
         "MainLambdaPermissionApiGateway"
       ]
     },
-    "ApiGatewayDeployment1714428999487": {
+    "ApiGatewayDeployment1715021198537": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -375,7 +385,7 @@
     "MainLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "MainLambdaVersion9rXU8ww1c9SBNGrgQMwCbwbjkGx45CXeD7DwOeZ2nzI"
+        "Ref": "MainLambdaVersionfZ85nh51OKt43HrwO3tboqJSnrfy1PMmByfKloIYrc"
       },
       "Export": {
         "Name": "sls-cart-service-dev-MainLambdaFunctionQualifiedArn"
