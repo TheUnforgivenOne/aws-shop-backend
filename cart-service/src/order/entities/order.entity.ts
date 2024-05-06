@@ -1,5 +1,6 @@
-import { Cart } from 'src/cart/entities';
 import { BaseEntity, Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Cart } from 'src/cart/entities';
+import { User } from 'src/users';
 
 enum OrderStatus {
   CREATED = 'CREATED',
@@ -14,8 +15,9 @@ export class Order extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ type: 'uuid', name: 'user_id', nullable: false })
-  userId: string;
+  @OneToOne(() => User)
+  @JoinColumn({ name: 'user_id' })
+  User: User;
 
   @OneToOne(() => Cart)
   @JoinColumn({ name: 'cart_id' })

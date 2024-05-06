@@ -1,5 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn, BaseEntity, OneToMany } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, BaseEntity, OneToMany, OneToOne, JoinColumn } from 'typeorm';
 import { CartItem } from './cartItem.entity';
+import { User } from 'src/users';
 
 export enum CartStatus {
   OPEN = 'OPEN',
@@ -11,8 +12,9 @@ export class Cart extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ type: 'uuid', name: 'user_id', nullable: false })
-  userId: string;
+  @OneToOne(() => User)
+  @JoinColumn({ name: 'user_id' })
+  User: User;
 
   @Column({ type: 'timestamp', name: 'created_at', nullable: false, default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;

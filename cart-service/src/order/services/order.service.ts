@@ -17,7 +17,9 @@ export class OrderService {
 
   // Transactional method
   async create(entityManager: EntityManager, Cart: Cart): Promise<Order> {
-    const { id } = await entityManager.create(Order, { userId: Cart.userId, Cart, payment: {}, delivery: {} }).save();
+    const { id } = await entityManager
+      .create(Order, { User: { id: Cart.User.id }, Cart, payment: {}, delivery: {} })
+      .save();
 
     return await entityManager.findOne(Order, { where: { id }, relations: { Cart: true } });
   }

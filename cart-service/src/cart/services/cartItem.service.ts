@@ -31,6 +31,9 @@ export class CartItemService {
     } else {
       await this.addItemToCart(cart, productId);
     }
+
+    cart.updatedAt = new Date();
+    await cart.save();
   }
 
   async decreaseCountOrDelete(cart: Cart, productId: string): Promise<void> {
@@ -44,5 +47,8 @@ export class CartItemService {
     } else {
       await this.deleteItemFromCart(cart.id, productId);
     }
+
+    cart.updatedAt = new Date();
+    await cart.save();
   }
 }

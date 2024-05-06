@@ -12,15 +12,18 @@ export class CartService {
   ) {}
 
   async findByUserId(userId: string): Promise<Cart> {
-    return await this.cartsRepository.findOne({ where: { userId }, relations: { Items: true } });
+    return await this.cartsRepository.findOne({
+      where: { User: { id: userId } },
+      relations: { Items: true, User: true },
+    });
   }
 
   async findById(cartId: string): Promise<Cart> {
-    return await this.cartsRepository.findOne({ where: { id: cartId }, relations: { Items: true } });
+    return await this.cartsRepository.findOne({ where: { id: cartId }, relations: { Items: true, User: true } });
   }
 
   async createByUserId(userId: string): Promise<Cart> {
-    const { id } = await this.cartsRepository.create({ userId }).save();
+    const { id } = await this.cartsRepository.create({ User: { id: userId } }).save();
 
     return this.findById(id);
   }
@@ -37,10 +40,10 @@ export class CartService {
 
   // Transactional method
   async completeByUserId(entityManager: EntityManager, userId: string): Promise<void> {
-    await entityManager.update(Cart, { userId }, { status: CartStatus.ORDERED });
+    await entityManager.update(Cart, { User: { id: userId } }, { status: CartStatus.ORDERED });
   }
 
   async removeByUserId(userId: string): Promise<void> {
-    await this.cartsRepository.delete({ userId });
+    await this.cartsRepository.delete({ User: { id: userId } });
   }
 }
