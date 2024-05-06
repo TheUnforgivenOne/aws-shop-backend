@@ -3,10 +3,9 @@ import { LocalAuthGuard, AuthService, JwtAuthGuard, BasicAuthGuard } from './aut
 
 @Controller()
 export class AppController {
-
   constructor(private authService: AuthService) {}
 
-  @Get([ '', 'ping' ])
+  @Get(['', 'ping'])
   healthCheck(): any {
     return {
       statusCode: HttpStatus.OK,
@@ -17,10 +16,9 @@ export class AppController {
   @UseGuards(LocalAuthGuard)
   @Post('api/auth/login')
   async login(@Request() req) {
-    console.log(req.user);
-    const token = this.authService.login(req.user, 'jwt');
+    const token = await this.authService.login(req.user, 'jwt');
 
-    return  {
+    return {
       statusCode: HttpStatus.OK,
       message: 'OK',
       data: {

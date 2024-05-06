@@ -8,8 +8,9 @@ import { CartModule } from './cart/cart.module';
 import { AuthModule } from './auth/auth.module';
 import { OrderModule } from './order/order.module';
 
-import { Cart, CartItem } from './cart/entities';
-import { Order } from './order/entities';
+import { Cart, CartItem } from './cart';
+import { Order } from './order';
+import { User } from './users';
 
 @Module({
   imports: [
@@ -23,7 +24,7 @@ import { Order } from './order/entities';
       username: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [Cart, CartItem, Order],
+      entities: [Cart, CartItem, Order, User],
       synchronize: true,
     }),
     AuthModule,

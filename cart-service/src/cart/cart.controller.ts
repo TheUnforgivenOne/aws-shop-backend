@@ -6,7 +6,6 @@ import { AppRequest, getUserIdFromRequest } from '../shared';
 
 import { CartService, CartItemService } from './services';
 import { DataSource } from 'typeorm';
-import { Cart, CartStatus } from './entities';
 
 @Controller('api/profile/cart')
 export class CartController {
