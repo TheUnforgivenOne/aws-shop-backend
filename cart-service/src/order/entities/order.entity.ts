@@ -15,11 +15,11 @@ export class Order extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @OneToOne(() => User)
+  @OneToOne(() => User, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'user_id' })
   User: User;
 
-  @OneToOne(() => Cart)
+  @OneToOne(() => Cart, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'cart_id' })
   Cart: Cart;
 

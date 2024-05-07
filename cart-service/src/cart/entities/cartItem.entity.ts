@@ -15,7 +15,7 @@ export class CartItem extends BaseEntity {
   @ManyToOne(
     () => Cart,
     (cart) => cart.Items,
-    { nullable: false, onDelete: 'CASCADE' }
+    { nullable: false, onDelete: 'CASCADE', orphanedRowAction: 'delete' }
   )
   @JoinColumn({ name: 'cart_id' })
   Cart: Cart;

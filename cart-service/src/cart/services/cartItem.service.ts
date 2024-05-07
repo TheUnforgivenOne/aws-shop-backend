@@ -15,7 +15,12 @@ export class CartItemService {
   }
 
   async addItemToCart(cart: Cart, productId: string): Promise<void> {
-    await this.cartItemRepository.create({ productId, count: 1, Cart: cart }).save();
+    const newCartItem = this.cartItemRepository.create({ productId, count: 1, Cart: { id: cart.id } });
+
+    cart.Items = [...cart.Items, newCartItem];
+
+    await newCartItem.save();
+    await cart.save();
   }
 
   async deleteItemFromCart(cartId: string, productId: string): Promise<void> {
